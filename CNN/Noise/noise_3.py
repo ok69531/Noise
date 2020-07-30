@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Jul 26 16:24:55 2020
-
-@author: SOYOUNG
-"""
 
 import tensorflow as tf
 import numpy as np
@@ -16,7 +10,7 @@ from tensorflow.keras.optimizers import Adam
 from matplotlib import pyplot as plt
 
 #%% read data, split train & test data
-noise_3 = pd.read_csv('C:/Users/SOYOUNG/Desktop/final_3by3_200721.csv')
+noise_3 = pd.read_csv('C:')
 noise_3.head()
 noise_3.shape
 
@@ -57,8 +51,8 @@ adam = Adam(lr = 0.00001)
 model.compile(optimizer = adam, loss = 'mae', metrics = ['mse'])
 model.fit(train_tensor, y_train, epochs = 1000, batch_size = 10, validation_data = (test_tensor, y_test))
 
-# model_3.save(r"C:\Users\SOYOUNG\Desktop\CNN models\cnn_model_3.h5")
-# model_3 = tf.keras.models.load_model(r"C:\Users\SOYOUNG\Desktop\CNN models\cnn_model_3.h5")
+# model_3.save(r"C:")
+# model_3 = tf.keras.models.load_model(r"C:")
 
 y_hat_train = model_3.predict(train_tensor).flatten()
 # y_train.values.flatten()
@@ -84,7 +78,7 @@ train_noise = pd.DataFrame({'Noise_Level' : y_train, 'pred_noise' : y_hat_train}
 test_noise = pd.DataFrame({'Noise_Level' : y_test, 'pred_noise' : pred_y.flatten()})
 noise = pd.concat([train_noise, test_noise])
 
-pd.merge(noise_3, noise, on = 'Noise_Level').to_csv('C:/Users/SOYOUNG/Desktop/noise_3by3.csv', header = True, index = False, encoding = 'utf-8')
+pd.merge(noise_3, noise, on = 'Noise_Level').to_csv('C:', header = True, index = False, encoding = 'utf-8')
 
 
 #%% Conv2D
