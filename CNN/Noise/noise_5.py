@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sun Jul 26 22:49:08 2020
-
-@author: SOYOUNG
-"""
 
 import tensorflow as tf
 import numpy as np
@@ -16,7 +10,7 @@ from tensorflow.keras.optimizers import Adam
 from matplotlib import pyplot as plt
 
 #%% read data, split train & test data
-noise_5 = pd.read_csv('C:/Users/SOYOUNG/Desktop/final_5by5_200721.csv')
+noise_5 = pd.read_csv(')
 noise_5.head()
 noise_5.shape
 
@@ -71,8 +65,8 @@ plt.scatter(y_hat_train, y_train, alpha = 0.1)
 plt.xlabel(r'$\hat{y}$')
 plt.ylabel('y')
 
-# model_5.save(r"C:\Users\SOYOUNG\Desktop\CNN models\cnn_model_5.h5")
-# model_5= tf.keras.models.load_model(r"C:\Users\SOYOUNG\Desktop\CNN models\cnn_model_5.h5")
+# model_5.save(r"")
+# model_5= tf.keras.models.load_model(r"")
 
 #%%
 pred_y = model_5.predict(test_tensor).flatten()
@@ -83,7 +77,7 @@ train_noise = pd.DataFrame({'Noise_Level' : y_train.flatten(), 'pred_noise' : y_
 test_noise = pd.DataFrame({'Noise_Level' : y_test.flatten(), 'pred_noise' : pred_y})
 noise = pd.concat([train_noise, test_noise])
 
-pd.merge(noise_5, noise, on = 'Noise_Level').to_csv('C:/Users/SOYOUNG/Desktop/noise_5by5.csv', header = True, index = False, encoding = 'utf-8')
+pd.merge(noise_5, noise, on = 'Noise_Level').to_csv('', header = True, index = False, encoding = 'utf-8')
 
 
 #%%
