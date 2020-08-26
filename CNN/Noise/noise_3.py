@@ -3,15 +3,7 @@ import tensorflow as tf
 import numpy as np
 import pandas as pd
 import keras
-
-from sklearn.model_selection import train_test_split
-from tensorflow.keras import datasets, layers, models
-from tensorflow.keras.optimizers import Adam
-from matplotlib import pyplot as plt
-
-#%% read data, split train & test data
-noise_3 = pd.read_csv('C:')
-noise_3.head()
+a
 noise_3.shape
 
 x = np.array(noise_3.iloc[:, 2:])
@@ -74,11 +66,29 @@ plt.scatter(y_test, pred_y, alpha = 0.1)
 
 
 #%%
-train_noise = pd.DataFrame({'Noise_Level' : y_train, 'pred_noise' : y_hat_train})
-test_noise = pd.DataFrame({'Noise_Level' : y_test, 'pred_noise' : pred_y.flatten()})
-noise = pd.concat([train_noise, test_noise])
+train_noise = pd.DataFrame({'ID' : noise_3.iloc[:, 0][y_train.index], 'pred_noise' : y_hat_train})
+train_noise.shape
+test_noise = pd.DataFrame({'ID' : noise_3.iloc[:, 0][y_test.index], 'pred_noise' : pred_y})
+test_noise.shape
 
-pd.merge(noise_3, noise, on = 'Noise_Level').to_csv('C:', header = True, index = False, encoding = 'utf-8')
+train_data = noise_3.iloc[y_train.index]
+train_merge = pd.merge(train_data, train_noise, on = 'ID')
+train_merge.shape
+train_merge.to_csv(r'C:\Users\SOYOUNG\Desktop\3by3_train.csv', header = True, index = False, encoding = 'utf-8')
+
+test_merge = pd.merge(noise_3.iloc[y_test.index], test_noise, on = 'ID')
+test_merge.shape
+test_merge.to_csv(r'C:\Users\SOYOUNG\Desktop\3by3_test.csv', header = True, index = False, encoding = 'utf-8')
+
+
+noise_pred = pd.concat([train_noise, test_noise])
+noise_pred.shape
+
+noise_3by3 = pd.merge(noise_3, noise_pred, on = 'ID')
+noise_3by3.shape
+
+noise_3by3.to_csv(r'C:\Users\SOYOUNG\Desktop\noise_3by3.csv', header = True, index = False, encoding = 'utf-8')
+
 
 
 #%% Conv2D
