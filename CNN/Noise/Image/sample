@@ -1,0 +1,203 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Jul 31 20:07:48 2020
+
+@author: SOYOUNG
+"""
+
+import copy
+import numpy as np
+import pandas as pd
+import imageio
+import cv2
+import tensorflow as tf
+import keras
+
+from matplotlib import pyplot as plt
+from skimage.transform import resize
+from PIL import Image
+from tensorflow.keras import datasets, layers, models, optimizers
+
+
+# from sklearn.cluster import KMeans
+
+#%% plt : RGB값이 0-1
+# img = plt.imread(r'C:\Users\SOYOUNG\Desktop\noise_image\80_532744.png')
+# img2 = plt.imread(r'C:\Users\SOYOUNG\Desktop\noise_image\80_532745.png')
+img.shape
+plt.imshow(img)
+plt.imshow(img[:, :, 0])
+
+test = copy.copy(img)
+test[:, :, 0] = np.where(test[:, :, 0] <= 0.96, 1, test[:, :, 0])
+test[:, :, 1] = np.where(test[:, :, 0] <= 0.96, 1, test[:, :, 1])
+test[:, :, 2] = np.where(test[:, :, 0] <= 0.96, 1, test[:, :, 2])
+plt.imshow(test)
+
+
+# img[:, :, 0]
+# plt.imshow(np.where(img[:,:,0] >= 245/255, 245/255, 1))
+# np.min(img[:, :, 1]) * 255
+
+img = mpimg.imread(r'C:\Users\SOYOUNG\Desktop\noise_image\80_532744.png')
+plt.imshow(img)
+
+
+#%% RGB 값 0-255
+# img = imageio.imread('C:/Users/SOYOUNG/Desktop/noise_image/80_532744.png', pilmode = 'RGB')
+# img2 = imageio.imread('C:/Users/SOYOUNG/Desktop/noise_image/80_532745.png', pilmode = 'RGB')
+img = cv2.imread(r'C:\Users\SOYOUNG\Desktop\noise_image\80_326240.png')
+img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+
+img.shape
+plt.imshow(img)
+
+np.where(img[:, :, 0] == 245)
+
+# resize >>> 흠...
+# img_width = 512; img_height = 512
+# resized_img = resize(img, (img_height, img_width)) * 255
+# re_img = resized_img.astype(np.uint8)
+# re_img.shape
+# plt.imshow(re_img)
+# np.where(re_img[:, :, 0] == 245) 
+
+# 도로
+road = copy.copy(img)
+road[:, :, 0] = np.where(road[:, :, 0] == 245, 245, 255)
+road[:, :, 1] = np.where(road[:, :, 0] == 255, 255, road[:, :, 1])
+road[:, :, 2] = np.where(road[:, :, 0] == 255, 255, road[:, :, 2])
+
+plt.imshow(road)
+
+np.min(road[:, :, 0])
+np.sum(road[:, :, 0] == 245)
+
+# 건물
+building = copy.copy(img)
+building[:, :, 0] = np.where((building[:, :, 0] <= 191) & (building[:, :, 0] != 76), 
+                             building[:, :, 0], 255)
+building[:, :, 1] = np.where((building[:, :, 0] <= 191) & (building[:, :, 0] != 76), 
+                             building[:, :, 1], 255)
+building[:, :, 2] = np.where((building[:, :, 0] <= 191) & (building[:, :, 0] != 76), 
+                             building[:, :, 2], 255)
+
+plt.imshow(building)
+
+# resize data를 이용하면 도로는 안그려지고 건물은 그려짐..
+
+# 방음벽
+sp = copy.copy(img)
+sp[:, :, 0] = np.where(sp[:, :, 0] == 76, 76, 255)
+sp[:, :, 1] = np.where(sp[:, :, 0] == 76, sp[:, :, 1], 255)
+sp[:, :, 2] = np.where(sp[:, :, 0] == 76, sp[:, :, 2], 255)
+
+plt.imshow(sp)
+
+plt.imshow(building)
+#%% 도로 색 채우기
+# min pooling을 사용하고 싶은데 함수가 없는듯?
+# 우선 gray scale로 바꿔서 생각해볼까
+
+def rgb2gray(rgb_img):
+    r = rgb_img[:, :, 0]
+    g = rgb_img[:, :, 1]
+    b = rgb_img[:, :, 2]
+    result = ((0.299 * r) + (0.587 * g) + (0.114 * b))
+    return result.astype(np.uint8)
+
+road_gray = rgb2gray(road)
+road_gray.shape
+
+np.min(road_gray[:, :])
+np.max(road_gray[:, :])
+np.where(road_gray[:, :] == np.min(road_gray))
+
+plt.imshow(road_gray, cmap='Greys_r')
+
+np.max(road_gray[road_gray < 255]) # 250
+
+
+# conv = layers.Conv2D(1, (1, 1), use_bias=False, kernel_initializer=tf.keras.initializers.Constant(1) ,activation = 'relu', padding = 'same', input_shape = (6668, 6667, 1))
+# conv(road_gray[tf.newaxis, :, :, tf.newaxis])
+
+data = np.pad(road_gray, ((1,1), (1,1)), 'constant')
+data.shape
+
+# filter = 20 * 20
+pool = layers.AveragePooling2D(pool_size = (10, 10), strides = (1, 1), padding = 'valid')
+pool(pool_input)
+
+pool_result = pool(tf.cast(road_gray[tf.newaxis, :, :, tf.newaxis], tf.float32))
+pool_result.shape
+test = pool(pool_result)
+
+pool_road = tf.squeeze(test)
+plt.imshow(pool_road, cmap = 'Greys_r')
+
+pool_road[(pool_road> np.min(pool_road)) & (pool_road< 255)]
+pool_road.shape
+
+
+# from skimage.measure import block_reduce
+# min_pool = block_reduce(road_gray, block_size = (3, 3), func = np.min)
+# plt.imshow(min_pool, cmap = 'Greys_r')
+
+
+#%%
+# vec = building.reshape((-1, 3))
+# vec = np.float32(vec)
+
+# criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
+
+# K = 3
+# attempts = 10
+# ret, label, center = cv2.kmeans(vec, K, None, criteria, attempts, cv2.KMEANS_PP_CENTERS)
+
+# center = np.uint8(center)
+# res = center[label.flatten()]
+# result_image = res.reshape((img.shape))
+
+# figure_size = 15
+# plt.figure(figsize = (figure_size, figure_size))
+# plt.subplot(1, 2, 1), plt.imshow(img)
+# plt.subplot(1, 2, 2), plt.imshow(result_image)
+
+
+#%% building clustering > object와 background가 나눠짐. 여기서는 굳이..?
+# row, col, depth = building.shape
+
+# build_new = np.zeros(shape = (row *col, 3))
+# glob_ind = 0
+# for i in range(row):
+#     for j in range(col):
+#         u = np.array([building[i, j, 0], building[i, j, 1], building[i, j, 2]])
+#         build_new[glob_ind, :] = u
+#         glob_ind += 1
+
+# K = 3
+# num_iters = 20
+# for g in range(num_iters):
+#     clusters = np.zeros((row * col, 1))
+#     out_dist = np.zeros((row * col, K))
+#     centroids = np.random.randint(0, 255, size = (K, 3))
+#     for k in range(K):
+#         diff = build_new - centroids[k, :]
+#         diff_dist = np.linalg.norm(diff, axis = 1)
+#         out_dist[:, k] = diff_dist
+#     clusters = np.argmin(out_dist, axis = 1)    
+#     for k1 in np.unique(clusters):
+#         centroids[k1, :] = np.sum(build_new[clusters == k1, :], axis = 0)/np.sum([clusters == k1])
+
+# clusters = np.reshape(clusters, (row, col))
+# out_img = np.zeros(img.shape)
+# for i in range(row):
+#     for j in range(col):
+#         out_img[i, j, 0] = centroids[clusters[i, j], 0]
+#         out_img[i, j, 1] = centroids[clusters[i, j], 1]
+#         out_img[i, j, 2] = centroids[clusters[i, j], 2]
+
+# out_img = np.array(out_img, dtype = 'uint8')
+# imgray = cv2.cvtColor(out_img, cv2.COLOR_BGR2GRAY)
+# plt.imshow(imgray, cmap = 'gray')
+
