@@ -166,7 +166,7 @@ np.array(noise_val).shape
 
 #%% 
 
-#%% 전처리 해야해~~~~
+#%% 전처리
 ## road preprocessing
 
 # 도로를 어떤걸로 해야하쥐
