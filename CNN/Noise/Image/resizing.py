@@ -1,9 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Nov  6 14:09:27 2020
-
-@author: SOYOUNG
-"""
 
 import cv2
 import copy
