@@ -19,7 +19,7 @@ from tqdm import tqdm
 #%%
 # 폴더 안의 사진 한장씩 불러와서 전처리하고 저장하기
 # 도로먼저
-road_dir = r'\\172.16.33.161\ml_gj\new_map\road'
+road_dir = r'server'
 road_path = os.path.join(road_dir, '*g')
 files = glob.glob(road_path)
 
@@ -65,7 +65,7 @@ for i in tqdm(range(len(files))):
 ######### 44_4853019_190690_284120_road : 데이터 손실 좀 있는듯..
 
 #%% building
-build_dir = r'\\172.16.33.161\ml_gj\new_map\building_2'
+build_dir = r''
 build_path = os.path.join(build_dir, '*g')
 build_files = glob.glob(build_path)
 
@@ -98,7 +98,7 @@ for i in tqdm(range(len(build_files))):
     cv2.imwrite(save_dir, resized)
     
 #%% soundproof wall
-wall_dir = r'\\172.16.33.161\ml_gj\new_map\wall_2'
+wall_dir = r''
 wall_path = os.path.join(wall_dir, '*g')
 wall_files = glob.glob(wall_path)
 
