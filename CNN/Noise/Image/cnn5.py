@@ -32,8 +32,8 @@ print(device_lib.list_local_devices())
 tf.debugging.set_log_device_placement(True)
 
 #%%
-# road_dir = r'D:\noise\noise_map\500\road'
-road_dir = '/home/jeon/Desktop/cho/noise_map/road'
+# road_dir = r''
+road_dir = ''
 road_path = os.path.join(road_dir, '*g')
 road_files = glob.glob(road_path)
 road_name = [] # list
@@ -43,14 +43,14 @@ for i in range(len(road_files)):
 y = np.array([x[:2] for x in road_name])
 
 
-# build_dir = r'D:\noise\noise_map\500\building'
-build_dir = '/home/jeon/Desktop/cho/noise_map/building'
+# build_dir = r''
+build_dir = ''
 build_path = os.path.join(build_dir, '*g')
 build_files = glob.glob(build_path)
 
 
-# wall_dir = r'D:\noise\noise_map\wall'
-wall_dir = '/home/jeon/Desktop/cho/noise_map/wall'
+# wall_dir = r''
+wall_dir = ''
 wall_path = os.path.join(wall_dir, '*g')
 wall_files = glob.glob(wall_path)
 
