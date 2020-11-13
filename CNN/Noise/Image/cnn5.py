@@ -1,4 +1,5 @@
 ### batch사용 안하고 데이터 메모리에 올려서,,, >>> 터짐,,,
+### 누적 원핫 사용 안하고, key value를 기준으로 ordinal embedding(0~1로 맞춰주기위해 max값으로 scaling)
 
 #%%
 # !pip install opencv-python
