@@ -45,9 +45,8 @@ for i in range(len(road_file_batch)):
     save_dir = "/home/jeon/Desktop/cho/noise_map/100/road_pool/" + road_file_batch[i].split('/')[-1]
     cv2.imwrite(save_dir, tf.squeeze(resized).numpy())
 
-# cd /home/jeon/~~
-#  nohub python resize_pool.py --idx i &
-    
+# cd /home/jeon/~~ (py 파일이 있는 directory로 설정)
+# nohub python resize_road.py --idx i &
 
 
 
