@@ -27,7 +27,7 @@ print(device_lib.list_local_devices())
 tf.debugging.set_log_device_placement(True)
 
 #%%
-road_dir = '/home/jeon/Desktop/cho/noise_map/100/road_pool'
+road_dir = ''
 road_path = os.path.join(road_dir, '*g')
 road_files = sorted(glob.glob(road_path))
 road_names = [road_files[i].split('/')[-1] for i in range(len(road_files))]
